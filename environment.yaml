@@ -1,0 +1,22 @@
+name: vaxseer
+channels:
+  - defaults
+dependencies:
+  - python=3.8.18
+  - pip
+  - scikit-learn=1.3.2
+  - scipy=1.10.1
+  - seaborn=0.13.0
+  - pandas=2.0.3
+  - pip:
+    - --extra-index-url https://download.pytorch.org/whl/cu117
+    - torch==1.13.1+cu117
+    - torchvision==0.14.1+cu117
+    - torchaudio==0.13.1
+    - pytorch-lightning==1.7.6
+    - lightning-transformers==0.2.1
+    - transformers==4.19.0
+    - torchmetrics==0.11.4
+    - biopython==1.81
+    - jupyterlab==4.0.9
+    - openpyxl

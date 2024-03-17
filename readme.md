@@ -1,33 +1,23 @@
-
-
 # Setup
-
 
 ### Environment
 
 ```
-conda env create -f environment_short.yaml
+conda env create -f environment.yaml
 conda activate vaxseer
 ```
 
 [MMseq2](https://github.com/soedinglab/MMseqs2) is required for aligning sequences.
 
 
-# Calculating coverage scores using VaxSeer
+# Data
 
-To 
-
+In [data/readme.md](data/readme.md).
 
 # Model training
 
-## Data
+In [vaxseer/readme.md](vaxseer/readme.md).
 
-See `data/readme.md`.
+# Retrospective evaluation
 
-## Training domiance and antigenicity predictor 
-
-See `vaxseer/readme.md`
-
-## Retrospective evaluation
-
-See `evaluation/readme.md`
+In [evaluation/readme.md](evaluation/readme.md).
