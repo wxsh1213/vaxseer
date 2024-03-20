@@ -38,18 +38,8 @@ python download_models_from_dropbox.py --task lm --year 2012 --subtype a_h3n2 --
 # To download all models (around 60GB):
 
 python download_models_from_dropbox.py 
-
-# extract files
-
-cd runs/flu_lm
-tar -zxvf *.tar.gz
-
-cd ../flu_hi_msa_regressor
-tar -zxvf *.tar.gz
 ```
-
 Results are available [here](https://people.csail.mit.edu/wxsh/vaxseer/results.tar.gz).
-
 ```
 wget https://people.csail.mit.edu/wxsh/vaxseer/results.tar.gz
 
