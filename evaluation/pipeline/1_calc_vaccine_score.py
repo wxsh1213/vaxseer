@@ -15,15 +15,12 @@ def get_accid2seq(path):
     return accid2seq
 
 def parse_args():
-    # prob_pred_path = "/data/rsg/nlp/wenxian/esm/devo_lightning/runs/flu_lm/2003-10_to_2020-04_6M/a_h3n2/human_minBinSize1000_lenQuantile0.2/test_1704_to_2004_34/lightning_logs/version_0/predictions.csv"
-    # hi_pred_path = "/data/rsg/nlp/wenxian/esm/devo_lightning/runs/flu_hi_msa_regressor/before_2020-04/a_h1n1_and_h3n2_seed=0/random_split/predict_201704_to_202004/lightning_logs/version_0/predictions.csv"
-    # hi_ids_path = "/data/rsg/nlp/wenxian/esm/data/gisaid/flu/ha_processed/2017-04_to_2020-04_9999M/a_h3n2/human_minBinSize1000_lenQuantile0.2_minCnt5.csv"
     parser = argparse.ArgumentParser(description='')
     parser.add_argument('--prob_pred_path', default=None, type=str, help="The prediction.csv output by the LM.")
     parser.add_argument('--hi_pred_path', default=None, type=str, help="The prediction.csv output by the HI predictor.")
     parser.add_argument('--hi_ids_path', default=None, type=str, help="The original .csv file for pairs.")
     parser.add_argument('--save_path', default=None, type=str)
-    parser.add_argument('--all_sequences_path', default="/data/rsg/nlp/wenxian/esm/data/gisaid/flu/ha.fasta", type=str)
+    parser.add_argument('--all_sequences_path', default=None, type=str)
     args = parser.parse_args()
     return args
 

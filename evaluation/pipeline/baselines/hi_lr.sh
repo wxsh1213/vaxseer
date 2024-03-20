@@ -1,7 +1,7 @@
 month="02"
 split="random_split"
 
-ckpt_saving_root_dir="/Mounts/rbg-storage1/users/wenxian/devo_lightning/run_vaxseer"
+ckpt_saving_root_dir="../runs"
 
 for year in `seq 2012 2014`
 do

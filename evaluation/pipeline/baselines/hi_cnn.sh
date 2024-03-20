@@ -1,7 +1,7 @@
 device="4"
 month="02"
 
-ckpt_root_dir="/Mounts/rbg-storage1/users/wenxian/devo_lightning/run_vaxseer/flu_hi_cnn_regressor"
+ckpt_root_dir="../runs/flu_hi_cnn_regressor"
 
 for year in `seq 2012 2014`
 do

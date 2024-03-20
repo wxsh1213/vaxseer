@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# year=$1 # e.g., "2018"
-# subtype=$2 # e.g., "a_h3n2"
 month="02"
 
 for year in `seq 2012 2021`

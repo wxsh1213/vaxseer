@@ -17,10 +17,10 @@ aligner.substitution_matrix = matrix
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Evaluating the generation performance')
-    parser.add_argument('--hi_form_path', default="/data/rsg/nlp/wenxian/esm/data/who_flu/before_2012-02/a_h3n2_hi_folds.csv", type=str)
-    parser.add_argument('--sequence_file', default="/data/rsg/nlp/wenxian/esm/data/gisaid/flu/ha.fasta", type=str)
-    parser.add_argument('--index_pair', default="/data/rsg/nlp/wenxian/esm/devo_lightning/runs/pipeline/2012-02/a_h3n2/vaccine_set=2009-02-2012-02___virus_set=2009-02-2012-02/vaccine_virus_pairs/pairs.csv", type=str)
-    parser.add_argument('--save_path', default="tmp.csv", type=str)
+    parser.add_argument('--hi_form_path', default="", type=str)
+    parser.add_argument('--sequence_file', default="", type=str)
+    parser.add_argument('--index_pair', default="", type=str)
+    parser.add_argument('--save_path', default="", type=str)
     parser.add_argument('--no_imputation', action="store_true")
     args = parser.parse_args()
     return args

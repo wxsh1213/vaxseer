@@ -50,7 +50,9 @@ for dominance_prediction_file in dominance_prediction_files:
                 "--hi_pred_path",
                 hi_prediction_file,
                 "--save_path",
-                os.path.join(save_dir, "vaccine_score.csv")
+                os.path.join(save_dir, "vaccine_score.csv"),
+                '--all_sequences_path',
+                args.sequence_file
                 ],
                 stdout=subprocess.PIPE, 
                 stderr=subprocess.PIPE

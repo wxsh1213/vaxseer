@@ -4,17 +4,10 @@ year=$2
 device=$3
 month="02"
 
-# ckpt_root_dir="runs" # directory of your checkpoints
-# ckpt_root_dir="/Mounts/rbg-storage1/users/wenxian/devo_lightning/release_checkpoints/" # TODO: delete later
-ckpt_root_dir="/Mounts/rbg-storage1/users/wenxian/devo_lightning/run_vaxseer/" # TODO: delete later
+ckpt_root_dir="../runs" # directory of your checkpoints
 
-# V0
-# lm_ckpt=$(ls $ckpt_root_dir/flu_lm/2003-10_to_"$year"-"$month"_2M/$subtype/human_minBinSize100_lenQuantile0.2/lightning_logs/version_0/checkpoints/epoch=*-step=*.ckpt) 
-# hi_ckpt=$(ls $ckpt_root_dir/flu_hi_msa_regressor/before_$year-$month/"$subtype"_seed=1005/random_split/lightning_logs/version_0/checkpoints/epoch=*-step=*.ckpt)
-
-# V1: training longer
-lm_ckpt=$(ls $ckpt_root_dir/flu_lm/2003-10_to_"$year"-"$month"_2M/$subtype/human_minBinSize100_lenQuantile0.2/max_steps_100k/lightning_logs/version_0/checkpoints/epoch=*-step=*.ckpt) 
-hi_ckpt=$(ls $ckpt_root_dir/flu_hi_msa_regressor/before_$year-$month/"$subtype"_seed=1005/random_split/max_steps_150k/lightning_logs/version_0/checkpoints/epoch=*-step=*.ckpt)  # training longer?
+lm_ckpt=$(ls $ckpt_root_dir/flu_lm/2003-10_to_"$year"-"$month"_2M/$subtype/human_minBinSize100_lenQuantile0.2/lightning_logs/version_0/checkpoints/epoch=*-step=*.ckpt) 
+hi_ckpt=$(ls $ckpt_root_dir/flu_hi_msa_regressor/before_$year-$month/"$subtype"_seed=1005/random_split/max_steps_150k/lightning_logs/version_0/checkpoints/epoch=*-step=*.ckpt)
 
 echo $lm_ckpt
 echo $hi_ckpt

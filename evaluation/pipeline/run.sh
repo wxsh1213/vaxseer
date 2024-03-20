@@ -77,8 +77,8 @@ fi
 # 2. Predict the hi values for pairs
 cd ../vaxseer
 
-classifier_root_dir="$working_directory/vaccine_virus_pairs/prediction"
-hi_pred_path=$classifier_root_dir"/lightning_logs/version_0/predictions.csv"
+classifier_root_dir="$working_directory/vaccine_virus_pairs/prediction/max_steps_150k/"
+hi_pred_path=$classifier_root_dir"/predictions.csv"
 
 if [ ! -f $hi_pred_path ];
 then
@@ -91,4 +91,8 @@ prob_pred_path=$lm_root_dir"/lightning_logs/version_0/test_results.csv"
 if [ ! -f $prob_pred_path ];
 then
     python -m bin.train --default_root_dir $lm_root_dir --test_data_paths $testing_viruses_path --max_position_embeddings 1024 --accelerator gpu --devices $devices --batch_size 64 --precision 16 --strategy ddp --num_workers 11 --test --resume_from_checkpoint $domiance_predictor_ckpt --model gpt2_time_new --max_testing_time $max_testing_time --min_testing_time $min_testing_time
+    cp $classifier_root_dir"/lightning_logs/version_0/predictions.csv" $hi_pred_path
+    rm -r $classifier_root_dir"/lightning_logs"
 fi
+
+

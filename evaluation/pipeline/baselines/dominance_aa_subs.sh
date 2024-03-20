@@ -1,5 +1,5 @@
 
-ckpt_saving_root_dir="/Mounts/rbg-storage1/users/wenxian/devo_lightning/run_vaxseer/flu_lm_aa_subs"
+ckpt_saving_root_dir="../runs/flu_lm_aa_subs"
 
 month="02"
 time_inverval="2M"

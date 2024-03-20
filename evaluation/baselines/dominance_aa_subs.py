@@ -77,11 +77,6 @@ def apply_aa_subs(complete_ref_seq, aa_subs):
 
 
 def mmseqs_alignment(alignment_path, query_path, ref_seq_path):
-    # query_path="/data/rsg/nlp/wenxian/esm/data/who_flu/before_2018-04/a_h3n2_virus.fasta"
-    # target_path="/data/rsg/nlp/wenxian/esm/data/gisaid/flu/reference_fasta/prortein_A_NewYork_392_2004_H3N2_ha.fasta"
-    # save_path="/data/rsg/nlp/wenxian/esm/data/who_flu/before_2018-04/a_h3n2_virus.ref.m8"
-    # mmseqs easy-search $query_path $target_path $save_path tmp --format-output "query,target,qaln,taln,qstart,qend,tstart,tend,mismatch" --max-seqs 5000
-
     if not os.path.exists(alignment_path):
         process = subprocess.Popen(['mmseqs', 'easy-search', query_path, ref_seq_path, alignment_path, "tmp", "--format-output", "query,target,qaln,taln,qstart,qend,tstart,tend,mismatch"],
             stdout=subprocess.PIPE, 
@@ -245,10 +240,6 @@ def train(train_dataloader, valid_dataloader, model, optimizer, epoch_num=100, c
                 os.makedirs(ckpt_dir)
             torch.save(model.state_dict(), os.path.join(ckpt_dir, "best.ckpt"))
         performances.append(valid_loss)
-
-
-# def save_results(nlls, test_dataset, save_path):
-    # ,src_id,prediction
 
 
 if __name__ == "__main__":
