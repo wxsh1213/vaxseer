@@ -31,4 +31,4 @@ nohup python -m bin.train \
     --repr_layer 12 \
     --category false \
     --n_layers 12 \
-    --model_name_or_path models/esm_msa1b_t12_100M_UR50S_args.pkl > nohup.train_hi_predictor.max_steps_150k.$subtype.$year.log 2>&1 &
+    --model_name_or_path models/esm_msa1b_t12_100M_UR50S_args.pkl > nohup.train_hi_predictor.$subtype.$year.log 2>&1 &

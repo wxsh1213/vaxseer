@@ -15,7 +15,7 @@ def seach_id(id2record, query):
 def read_fasta(path, max_date = "9999-12-31"):
     max_year, max_month = int(max_date.split("-")[0]), int(max_date.split("-")[1])
     
-    min_seq_length = np.quantile(np.asarray([len(str(x.seq)) for x in SeqIO.parse(path, "fasta")]), 0.2)
+    min_seq_length = 553
     print("Min seq length", min_seq_length)
 
     id2records = defaultdict(set)

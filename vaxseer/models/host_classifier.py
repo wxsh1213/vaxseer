@@ -10,6 +10,30 @@ from sklearn.metrics import average_precision_score, roc_auc_score
 import pandas as pd
 from esm.model.msa_transformer import MSATransformer
 
+
+def configure_optimizers(model):
+    """Prepare optimizer and schedule (linear warmup and decay)"""
+    optimizer = torch.optim.AdamW(model.parameters(), lr=model.config.learning_rate, eps=model.config.adam_epsilon)
+    num_training_steps, num_warmup_steps = model.compute_warmup(
+        num_training_steps=-1,
+        num_warmup_steps=0.1,
+    )
+    if model.config.scheduler == "none":
+        return [optimizer], []
+    elif model.config.scheduler == "linear":
+        scheduler = transformers.get_linear_schedule_with_warmup(
+            optimizer, num_warmup_steps=num_warmup_steps, num_training_steps=num_training_steps
+        )
+    elif model.config.scheduler == "cosine":
+        scheduler = transformers.get_cosine_schedule_with_warmup(
+            optimizer,
+            num_warmup_steps=num_warmup_steps,
+            num_training_steps=num_training_steps,
+        )
+
+    scheduler = {"scheduler": scheduler, "interval": "step", "frequency": 1}
+    return [optimizer], [scheduler]
+
 @register_model("esm_classifier")
 class ESMClassifier(LightningModule):
     def __init__(self, config, alphabet, **args) -> None:
@@ -19,11 +43,6 @@ class ESMClassifier(LightningModule):
         self.alphabet = alphabet
         self.pad_idx = alphabet.pad()
         self.config = config
-
-        # self.model, self.alphabet = pretrained.load_model_and_alphabet(config.model_name_or_path)
-        # if not getattr(config, "load_weights", True): # Not using the pretrained parameters
-        #     self.model.args.layers = getattr(config, "n_layers", self.model.args.layers)
-        #     self.model = MSATransformer(self.model.args, self.alphabet)
 
         if args.get("model_name_or_path", None) is None:
             model_name_or_path = config.model_name_or_path
@@ -51,7 +70,6 @@ class ESMClassifier(LightningModule):
 
     def overwrite_generate_kwargs(self, args):
         setattr(self.config, "predict_index_path", args.predict_index_path) 
-        # setattr(self.config, "output_grad_norm", getattr(args, "output_grad_norm", False)) 
         setattr(self.config, "predict_numerical_output", args.predict_numerical_output) 
         
 
@@ -75,7 +93,6 @@ class ESMClassifier(LightningModule):
         parent_parser.add_argument('--n_layers', type=int, default=12)
         parent_parser.add_argument('--model_name_or_path', type=str, default="models/esm_msa1b_t12_100M_UR50S_args.pkl")
         parent_parser.add_argument('--load_from_checkpoint', type=str, default=None)
-        # parent_parser.add_argument('--learning_rate', type=float, default=2e-5)
         parent_parser.add_argument('--adam_epsilon', type=float, default=1e-8)
         parent_parser.add_argument('--warmup_steps', type=int, default=0)
         parent_parser.add_argument('--weight_decay', type=float, default=0.0)
@@ -83,8 +100,6 @@ class ESMClassifier(LightningModule):
 
         parent_parser.add_argument('--add_seq_label_embeddings', type=str2bool, default="false")
         parent_parser.add_argument('--add_ref_seq_label_embeddings', type=str2bool, default="false")
-        # parent_parser.add_argument('--load_weights', type=str2bool, default="true")
-        # parent_parser.add_argument('--output_grad_norm', type=str2bool, default="false")
         parent_parser.add_argument('--predict_numerical_output', type=str, default="average", choices=["argmax", "average"])
         
         return parent_parser
@@ -248,35 +263,11 @@ class ESMClassifier(LightningModule):
                 "%s_prauc_rev" % key: prauc_rev, \
                 "%s_roc_auc_rev" % key: roc_auc_rev})
 
+    
+
     def configure_optimizers(self):
-        """Prepare optimizer and schedule (linear warmup and decay)"""
-        model = self.model
-        no_decay = ["bias", "LayerNorm.weight"]
-        optimizer_grouped_parameters = [
-            {
-                "params": [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)],
-                "weight_decay": self.config.weight_decay,
-            },
-            {
-                "params": [p for n, p in model.named_parameters() if any(nd in n for nd in no_decay)],
-                "weight_decay": 0.0,
-            },
-        ]
-        optimizer = torch.optim.AdamW(optimizer_grouped_parameters, lr=self.config.learning_rate, eps=self.config.adam_epsilon)
-
-        num_training_steps, num_warmup_steps = self.compute_warmup(
-            num_training_steps=-1,
-            num_warmup_steps=0.1,
-        )
-
-        scheduler = transformers.get_cosine_schedule_with_warmup(
-            optimizer,
-            num_warmup_steps=num_warmup_steps,
-            num_training_steps=num_training_steps,
-        )
-        scheduler = {"scheduler": scheduler, "interval": "step", "frequency": 1}
-        return [optimizer], [scheduler]
-
+        return configure_optimizers(self)
+        
     @property
     def num_training_steps(self) -> int:
         return self.trainer.estimated_stepping_batches
@@ -349,9 +340,7 @@ class biLSTMRegressor(LightningModule):
         for output in outputs:
             for key in output:
                 results_cols[key].append(output[key])
-            # results_cols[key] = defaultdict(list)
 
-        # print(self.config.predict_index_path)
         ori_df = pd.read_csv(self.config.predict_index_path)
         ori_df = ori_df.drop(['virus_seq', 'reference_seq'], axis=1)
         for key in results_cols:
@@ -417,9 +406,6 @@ class biLSTMRegressor(LightningModule):
         preds = torch.cat(results_pred).cpu().squeeze()
         labels = torch.cat(results_gt).cpu().squeeze()
         labels_binary = (labels >= 3).long()
-        print(labels)
-        print(preds)
-        print((labels - preds).size())
 
         prauc = average_precision_score(labels_binary, preds)
         roc_auc = roc_auc_score(labels_binary, preds)
@@ -428,6 +414,7 @@ class biLSTMRegressor(LightningModule):
             "mse": ((labels - preds) ** 2).mean()})
     
     def configure_optimizers(self):
+        return configure_optimizers(self)
         """Prepare optimizer and schedule (linear warmup and decay)"""
         optimizer = torch.optim.AdamW(self.parameters(), lr=self.config.learning_rate, eps=self.config.adam_epsilon)
         num_training_steps, num_warmup_steps = self.compute_warmup(
@@ -541,8 +528,7 @@ class CNNRegressor(LightningModule):
         for output in outputs:
             for key in output:
                 results_cols[key].append(output[key])
-            # results_cols[key] = defaultdict(list)
-        # print(self.config.predict_index_path)
+
         ori_df = pd.read_csv(self.config.predict_index_path)
         ori_df = ori_df.drop(['virus_seq', 'reference_seq'], axis=1)
         for key in results_cols:
@@ -602,9 +588,7 @@ class CNNRegressor(LightningModule):
         preds = torch.cat(results_pred).cpu().squeeze()
         labels = torch.cat(results_gt).cpu().squeeze()
         labels_binary = (labels >= 3).long()
-        # print(labels)
-        # print(preds)
-        # print((labels - preds).size())
+
         self.all_outputs = preds
 
         prauc = average_precision_score(labels_binary, preds)
@@ -628,13 +612,33 @@ class CNNRegressor(LightningModule):
         return output_set
     
     def configure_optimizers(self):
+        return configure_optimizers(self)
         """Prepare optimizer and schedule (linear warmup and decay)"""
         optimizer = torch.optim.AdamW(self.parameters(), lr=self.config.learning_rate, eps=self.config.adam_epsilon)
         num_training_steps, num_warmup_steps = self.compute_warmup(
             num_training_steps=-1,
             num_warmup_steps=0.1,
         )
+        if self.config.scheduler == "none":
+            return {
+                "optimizer": optimizer,
+            }
+        elif self.config.scheduler == "linear":
+            scheduler = transformers.get_linear_schedule_with_warmup(
+                optimizer, num_warmup_steps=num_warmup_steps, num_training_steps=num_training_steps
+            )
+        elif self.config.scheduler == "cosine":
+            scheduler = transformers.get_cosine_schedule_with_warmup(
+                optimizer,
+                num_warmup_steps=num_warmup_steps,
+                num_training_steps=num_training_steps,
+            )
 
+        return {
+            "optimizer": optimizer,
+            "lr_scheduler": {"scheduler": scheduler, "interval": "step", "frequency": 1},
+        }
+    
         scheduler = transformers.get_cosine_schedule_with_warmup(
             optimizer,
             num_warmup_steps=num_warmup_steps,
@@ -709,9 +713,6 @@ class ESMRegressor(ESMClassifier):
             preds = torch.cat(results_pred[key]).cpu().squeeze()
             labels = torch.cat(results_gt[key]).cpu().squeeze()
             labels_binary = (labels >= 3).long()
-            print(labels)
-            print(preds)
-            print((labels - preds).size())
             
             prauc = average_precision_score(labels_binary, preds)
             roc_auc = roc_auc_score(labels_binary, preds)

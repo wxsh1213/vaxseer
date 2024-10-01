@@ -30,7 +30,7 @@ def parse_args(dm_cls=None, model_cls=None):
     parser.add_argument('--min_testing_time', type=int, default=-1)
     parser.add_argument('--weight_decay_rate', type=float, default=0.01)
     parser.add_argument('--learning_rate', type=float, default=1e-5)
-    parser.add_argument('--scheduler', type=str, default="linear", choices=["cosine", "linear"])
+    parser.add_argument('--scheduler', type=str, default="linear", choices=["cosine", "linear", "none"])
 
     # add the args from Trainer
     parser = pl.Trainer.add_argparse_args(parser)

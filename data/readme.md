@@ -10,8 +10,8 @@ Following code is used to build the training data collected before `year`-`month
 year="2018"
 month="02"
 subtype="a_h3n2" # or a_h1n1
-meta_data_path="gisaid/metadata.csv"
-sequences_path="gisaid/ha.fasta"
+meta_data_path="gisaid/raw/metadata.csv"
+sequences_path="gisaid/raw/ha.fasta"
 save_dir="gisaid/ha_processed"
 
 python process_fasta.py --time_interval 2 \
@@ -21,7 +21,7 @@ python process_fasta.py --time_interval 2 \
     --subtype $subtype --host human --split_by month \
     --meta_data_path $meta_data_path \
     --sequences_path $sequences_path \
-    --save_dir $save_dir
+    --save_dir $save_dir --min_seq_len 553
     
 ```
 

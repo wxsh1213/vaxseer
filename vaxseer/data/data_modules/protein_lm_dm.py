@@ -32,8 +32,6 @@ class ProteinLMWeightedDataModule(ProteinGISAIDDataModule):
             fake_fasta.extend([("gen%d" % (i + len(fake_fasta)), "", "gen%d %s" % (i + len(fake_fasta), desc)) for i in range(self.args.generation_seq_number)])
 
         pred_set = TemporalFastaDataset(fake_fasta, self.vocab, get_time_method="kw", properties=properties)
-        if self.args.remap_continent:
-            pred_set = self.remap_continent(pred_set)
         return pred_set
 
 

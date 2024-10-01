@@ -153,8 +153,11 @@ def customize_save_path(args):
     if args.remove_min_size > 0:
         save_path += "_minBinSize%d" % args.remove_min_size
 
-    if args.seq_length_quantile > 0:
-        save_path += "_lenQuantile%g" % args.seq_length_quantile
+    if args.min_seq_length >= 0:
+        save_path += "_minLen%g" % args.min_seq_length
+    else:
+        if args.seq_length_quantile > 0:
+            save_path += "_lenQuantile%g" % args.seq_length_quantile
     
     if args.min_count > 0:
         save_path += "_minCnt%g" % args.min_count
@@ -181,8 +184,6 @@ def build_id2seq_flu(sequences):
         desc = [y for x in record[-1].split() for y in x.split("|")]
         ha_id = None
         for x in desc:
-            # if "EPI_ISL_" in x:
-                # isl_id = x
             if "EPI" in x and "EPI_ISL_" not in x:
                 ha_id = x
         # print(ha_id)
@@ -207,6 +208,7 @@ if __name__ == "__main__":
     parser.add_argument('--split_by', default="month", type=str, choices=["year", "month", "day"])
     parser.add_argument('--identity_keys', nargs="+", default=[], type=str, choices=["lineage", "host", "location", "age", "subtype"])
     parser.add_argument('--min_count', default=0, type=int)
+    parser.add_argument('--min_seq_length', default=-1, type=int)
 
     args = parser.parse_args()
 
@@ -222,7 +224,10 @@ if __name__ == "__main__":
         args.end_date = "9999-12-31"
    
     sequences = read_fasta(args.sequences_path, quiet=True)
-    min_seq_length = np.quantile(np.asarray([len(x[1]) for x in sequences]), args.seq_length_quantile)
+    if args.min_seq_length >= 0:
+        min_seq_length = args.min_seq_length
+    else:
+        min_seq_length = np.quantile(np.asarray([len(x[1]) for x in sequences]), args.seq_length_quantile)
     print("min_seq_length", min_seq_length)
     reference_seq_length, reference_seq_count = Counter([len(x[1]) for x in sequences]).most_common(1)[0]
     print("Reference sequence length %d (%g percent)" % (reference_seq_length, reference_seq_count / len(sequences)))
@@ -306,7 +311,6 @@ if __name__ == "__main__":
     print("skip_subtype", skip_subtype)
     print("skip_bad_seqs", skip_bad_seqs)
     print("skip_not_meta", skip_not_meta)
-    # print(len(temporal_sequences))
 
     skip_small_clades = 0
     skip_small_clades_seqs = 0

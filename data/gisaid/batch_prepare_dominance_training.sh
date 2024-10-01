@@ -1,4 +1,3 @@
-
 start_year="$1"
 end_year="$2"
 
@@ -8,9 +7,10 @@ do
     do
         echo "Prepare data for $year, $subtype"
         month="02"
-        meta_data_path="gisaid/metadata.csv"
-        sequences_path="gisaid/ha.fasta"
-        save_dir="gisaid/ha_processed"
+
+        meta_data_path="gisaid/raw/metadata_20240630.csv"
+        sequences_path="gisaid/raw/ha_submit_before_2024-06-30.fasta"
+        save_dir="gisaid/ha_processed_20240630"
 
         python process_fasta.py --time_interval 2 \
             --start_date 2003-10 \
@@ -19,6 +19,6 @@ do
             --subtype $subtype --host human --split_by month \
             --meta_data_path $meta_data_path \
             --sequences_path $sequences_path \
-            --save_dir $save_dir
+            --save_dir $save_dir --min_seq_len 553
     done
 done

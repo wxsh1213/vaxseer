@@ -11,7 +11,6 @@ def get_accid2seq(path):
             if "EPI" in x and "EPI_ISL" not in x:
                 acc_id = x.strip()
                 accid2seq[acc_id] = str(record.seq)
-                break
     return accid2seq
 
 def parse_args():
