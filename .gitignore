@@ -1,10 +1,9 @@
 data/antigenicity/reports_clean
 data/antigenicity/reports_xlsx
 data/antigenicity/hi_processed
-data/gisaid/ha_processed
+data/gisaid/ha_processed*
 data/gisaid/nextclade_annotations
-data/gisaid/ha.fasta
-data/gisaid/metadata.csv
+data/gisaid/raw
 data/recommended_vaccines_from_gisaid_ha
 __pycache__
 */__pycache__
@@ -12,3 +11,6 @@ __pycache__
 tmp
 runs
 */nohup*
+evaluation/jupyter_notebooks_figs/.ipynb_checkpoints
+evaluation/jupyter_notebooks_figs/figs
+legacy/*
