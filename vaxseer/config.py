@@ -13,6 +13,8 @@ def parse_args(dm_cls=None, model_cls=None):
     parser = argparse.ArgumentParser(description='')
     parser.add_argument('--seed', type=int, default=1005)
     
+    parser.add_argument('--val_every_n_steps', type=int, default=None, help='Eval every n trianing steps.')
+    parser.add_argument('--set_none_check_val_every_n_epoch', action="store_true")
     parser.add_argument('--early_stop', action="store_true")
     parser.add_argument('--early_stop_patience', type=int, default=3)
     parser.add_argument('--early_stop_monitor', type=str, default="val_loss")
@@ -51,6 +53,9 @@ def parse_args(dm_cls=None, model_cls=None):
     
     # Parsing
     args = parser.parse_args()
+
+    if args.set_none_check_val_every_n_epoch:
+        args.check_val_every_n_epoch = None
     
     # If the vocab type (e.g., ESM, MSA etc...) is not specified, we use the vocab type from model_name_or_path.
     if args.vocab == "" and args.model_name_or_path != "":
