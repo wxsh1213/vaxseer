@@ -4,6 +4,8 @@ First, you might need to register for the access of [GISAID](https://gisaid.org/
 
 # Build training data for dominance predictors
 
+The HI results were collected from [annual and interim reports](https://www.crick.ac.uk/research/platforms-and-facilities/worldwide-influenza-centre/annual-and-interim-reports) of the Worldwide Influenza Centre laboratory at the Francis Crick Institute. The processed data can be download from [Zenodo](https://zenodo.org/records/17086428).
+
 Following code is used to build the training data collected before `year`-`month` for dominance predictors.
 
 ```
@@ -21,7 +23,7 @@ python process_fasta.py --time_interval 2 \
     --subtype $subtype --host human --split_by month \
     --meta_data_path $meta_data_path \
     --sequences_path $sequences_path \
-    --save_dir $save_dir --min_seq_len 553
+    --save_dir $save_dir --min_seq_length 553
     
 ```
 
