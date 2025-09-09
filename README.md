@@ -1,24 +1,6 @@
-# VaxSeer: ML-Optimized Influenza Vaccine Selection
+# VaxSeer
 
-## Overview
-
-VaxSeer is a machine learning system designed to optimize seasonal influenza vaccine strain selection. The project aims to improve vaccine effectiveness by predicting which influenza virus strains should be included in seasonal flu vaccines to maximize protection against future circulating viruses.
-
-### Key Features
-
-- **Dual Prediction System**: 
-  - **Dominance Predictor**: Forecasts which flu strains will become dominant in upcoming seasons
-  - **Antigenicity Predictor**: Measures cross-protection between vaccine strains and circulating viruses using HI (hemagglutination inhibition) test data
-
-- **Coverage Score Optimization**: Calculates vaccine coverage scores to predict population-level protection
-
-- **Multi-subtype Support**: Handles both H3N2 and H1N1 influenza subtypes
-
-- **Data-Driven Approach**: Trained on historical data (2012-2021) using GISAID sequence databases
-
-- **Retrospective Evaluation**: Validates predictions against actual WHO vaccine recommendations and real-world vaccine effectiveness
-
-The system processes viral hemagglutinin (HA) protein sequences to predict future strain dominance and antigenic relationships, potentially reducing disease burden from seasonal influenza through improved vaccine strain selection.
+Code for [VaxSeer: a machine learning framework for influenza vaccine strain selection](https://www.nature.com/articles/s41591-025-03917-y).
 
 # Setup
 
@@ -66,4 +48,16 @@ Results are available [here](https://people.csail.mit.edu/wxsh/vaxseer/results.t
 wget https://people.csail.mit.edu/wxsh/vaxseer/results.tar.gz
 
 tar -zxvf results.tar.gz
+```
+
+# Cite
+```
+@article{shi2025influenza,
+  title={Influenza vaccine strain selection with an AI-based evolutionary and antigenicity model},
+  author={Shi, Wenxian and Wohlwend, Jeremy and Wu, Menghua and Barzilay, Regina},
+  journal={Nature Medicine},
+  pages={1--9},
+  year={2025},
+  publisher={Nature Publishing Group US New York}
+}
 ```
