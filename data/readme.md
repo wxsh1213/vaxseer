@@ -43,11 +43,11 @@ python antigenicity/dowload_pdfs.py antigenicity/reports_pdf
 
 (2) Convert pdf to xlsx using [tools](https://premium.pdftoexcel.com/). 
 
-Assuming that xlsx files are save under folder `antigenicity/reports_xlsx`, you could run `antigenicity/antigenicity_prepare_data.sh` to extract antigenic analyses tables and vaccine-virus pairs from .xlsx files.
+(3) Assuming that xlsx files are save under folder `antigenicity/reports_xlsx`, you could run `antigenicity/antigenicity_prepare_data.sh` to extract antigenic analyses tables and vaccine-virus pairs from .xlsx files.
 
 ## Built final training/evaluation sets
 
-After extracting the HI test results from reports, we need to find the sequences corresponding to vaccine and virus strain names, and calculate the average HI test results for each pair of sequences. Such information can be obtained from the GISAID by following scripts:
+After extracting the HI test results from reports, we need to find the sequences corresponding to vaccine and virus strain names, and calculate the average HI test results for each pair of sequences. Such information can be obtained from the GISAID.
 
 `antigenicity/antigenicity_pipeline.sh` shows the example of building training data for one winter season:
 ```
