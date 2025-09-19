@@ -4,8 +4,6 @@ First, you might need to register for the access of [GISAID](https://gisaid.org/
 
 # Build training data for dominance predictors
 
-The HI results were collected from [annual and interim reports](https://www.crick.ac.uk/research/platforms-and-facilities/worldwide-influenza-centre/annual-and-interim-reports) of the Worldwide Influenza Centre laboratory at the Francis Crick Institute. The processed data can be download from [Zenodo](https://zenodo.org/records/17086428).
-
 Following code is used to build the training data collected before `year`-`month` for dominance predictors.
 
 ```
@@ -31,17 +29,25 @@ or run `gisaid/batch_prepare_dominance_training.sh 2012 2021` to process all dat
 
 # Building training data for antigenicity predictors
 
+## Extract HI test results from reports
+
 The HI test results are collected from the reports from the [Worldwide Influenza Centre lab](https://www.crick.ac.uk/research/platforms-and-facilities/worldwide-influenza-centre/annual-and-interim-reports). 
 
-We download the reports before February 2023. Following code is used to download reports:
+We provide the data extracting from those reports in `data/antigenicity/hi_processed/a_h1n1_pairs.csv` and `data/antigenicity/hi_processed/a_h3n2_pairs.csv`. If you want to process the raw data by yourself, you could follow steps:
+
+(1) Download the reports before February 2023. Following code is used to download reports:
 
 ```
 python antigenicity/dowload_pdfs.py antigenicity/reports_pdf
 ```
 
-We convert pdf to xlsx using [tools](https://premium.pdftoexcel.com/). 
+(2) Convert pdf to xlsx using [tools](https://premium.pdftoexcel.com/). 
 
 Assuming that xlsx files are save under folder `antigenicity/reports_xlsx`, you could run `antigenicity/antigenicity_prepare_data.sh` to extract antigenic analyses tables and vaccine-virus pairs from .xlsx files.
+
+## Built final training/evaluation sets
+
+After extracting the HI test results from reports, we need to find the sequences corresponding to vaccine and virus strain names, and calculate the average HI test results for each pair of sequences. Such information can be obtained from the GISAID by following scripts:
 
 `antigenicity/antigenicity_pipeline.sh` shows the example of building training data for one winter season:
 ```
